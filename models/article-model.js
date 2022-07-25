@@ -1,7 +1,7 @@
 const sqlite = require('sqlite3');
 const sqlite3 = sqlite.verbose();
 
-const db = new sqlite3.Database(':memory:');
+const db = new sqlite3.Database('article.db');
 
 db.serialize(() => {
     const sql = `CREATE TABLE IF NOT EXISTS ARTICLES`;

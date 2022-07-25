@@ -1,13 +1,13 @@
 const StatusCodes = require('http-status-codes');
 
 const express = require('express');
-const Router = express.Router();
+const router = express.Router();
 
 const articleService = require('../services/article-service');
 
 
 // Constants
-const router = Router();
+
 const { CREATED, OK } = StatusCodes;
 
 // Paths
