@@ -1,14 +1,7 @@
 const db = require('./mysql');
 
-console.log(122, db_path, db)
 
-// db.serialize(() => {
-//     const sql = `CREATE TABLE IF NOT EXISTS ARTICLE`;
-//     db.run(sql);
-
-// });
-
-class Article {
+class User {
     static all(cb) {
         db.all('SELECT * FROM article', cb);
     }
@@ -41,4 +34,4 @@ class Article {
 }
 
 module.exports = db;
-module.exports.Article = Article;
+module.exports.User = User;

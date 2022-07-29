@@ -5,11 +5,13 @@ const Entry = require("../models/information_model");
  *
  * @returns
  */
-function getInformation(cb) {
+async function getInformation(cb) {
   try {
-    Entry.getRange(0, -1, cb);
+    const data = await Entry.getRange(0, -1);
+    cb(null, data);
+
   } catch (error) {
-    return error;
+    cb(error)
   }
 }
 
@@ -20,14 +22,14 @@ function getInformation(cb) {
  * @param id
  * @returns
  */
-function addInformation(data, cb) {
+async function addInformation(data, cb) {
   try {
-    console.log(data)
+    
     const entry = new Entry(data);
-    entry.save(cb);
-
+    const result = await entry.save();
+    cb(null, result)
   } catch (error) {
-    return error;
+    cb(error)
   }
 }
 

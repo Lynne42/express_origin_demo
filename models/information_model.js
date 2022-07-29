@@ -1,42 +1,51 @@
-const redis = require('redis');
-const db = redis.createClient();
+const redis = require("redis");
+const client = redis.createClient({
+  url: `redis://101.43.129.224:6379`,
+  password: "ql123456",
+});
+
+client.connect();
+//   host: "101.43.129.224",
+//   port: 6379,
+
+client.on("connect", function () {
+  console.log("Redis client connected");
+});
+
+client.on("error", (err) => {
+  console.log("连接redis失败");
+  client.end(true);
+  client.quit();
+});
 
 class Entry {
-
-    static getRange(from, to, cb) {
-        db.lrange('entries', from, to, (err, items) => {
-            if(err) return cb(err);
-
-            let entries = [];
-            items.forEach(item => {
-                entries.push(JSON.parse(item));
-            })
-            cb(null, entries)
-        })
+  static async getRange(from, to, cb) {
+    try {
+      const data = await client.lRange("entries", from, to);
+      return data;
+    } catch (error) {
+      return error;
     }
+  }
 
-    constructor(obj) {
-        
-        for(let key in obj) {
-            this[key] = obj[key];
-        }
-        console.log(this)
+  constructor(obj) {
+    for (let key in obj) {
+      this[key] = obj[key];
     }
+  }
 
-    save(cb) {
-        
-        const entryJson = JSON.stringify(this);
-        
-        db.lpush('entries', entryJson, (err) => {
-            console.log(111)
-            if(err) {
-                return cb(err)
-            }
-            console.log(entryJson)
-            cb(entryJson)
-        })
+  async save(cb) {
+    const entryJson = JSON.stringify(this);
+    try {
+      const count = await client.lPush("entries", entryJson);
+      return {
+        count,
+        entryJson,
+      };
+    } catch (error) {
+      return error;
     }
+  }
 }
-
 
 module.exports = Entry;

@@ -46,7 +46,7 @@ router.post(p.add, (req, res) => {
       data,
       (err, data) => {
         if (err) {
-          throw new Error(err);
+          throw err;
         }
         return res.status(OK).json(responseJson(0, data, "add success"));
       }
