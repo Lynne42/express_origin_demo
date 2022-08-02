@@ -1,41 +1,61 @@
-const db = require('./mysql');
-
-// db.serialize(() => {
-//     const sql = `CREATE TABLE IF NOT EXISTS ARTICLE`;
-//     db.run(sql);
-
-// });
+const db = require("./mysql");
 
 class Article {
-    static all(cb) {
-        db.all('SELECT * FROM article', cb);
-    }
-
-    static find(id, cb) {
-        db.get('SELECT * FROM article WHERE id = ?', id, cb);
-    }
-
-    static create(data, cb) {
-        const sql = 'INSERT INTO article(title, content) VALUES(?, ?)';
-        db.run(sql, data.title, data.content, cb)
-    }
-
-    static update(data, cb) {
-        const sql = 'UPDATE article SET title=$title,content=$content WHERE id = $id';
-        db.run(sql, {
-            $id: data.id,
-            $title: data.title,
-            $content: data.content,
-        }, cb)
-    }
-
-    static delete(id, cb) {
-        if(!id) {
-            throw new Error('please provide an id');
-        
+  static all(data, cb) {
+    db.query(
+      "SELECT * FROM `article` WHERE `userid` = ?",
+      [data.userid],
+      function (err, results) {
+        if (err) {
+          cb(err)
         }
-        db.run('DELETE FROM article WHERE id = ?', id, cb)
+        cb(null, results);
+      }
+    );
+  }
+
+  static find(id, cb) {
+    db.query(
+      "SELECT * FROM `article` WHERE `id` = ?",
+      [id],
+      function (err, results) {
+        if (err) {
+          cb(err)
+        }
+        cb(null, results);
+      }
+    );
+  }
+
+  static add(data, cb) {
+    const sql = "INSERT INTO article SET ?";
+    db.query(
+      sql,
+      {
+        title: data.title,
+        content: data.content,
+        userid: data.userid,
+      },
+      function (err, results) {
+        if (err) {
+          cb(err)
+        }
+        cb(null, results);
+      }
+    );
+  }
+
+  static update(data, cb) {
+    const sql = "UPDATE article SET title=?,content=? WHERE id = ?";
+    db.query(sql, [data.title, data.content, data.id], cb);
+  }
+
+  static delete(id, cb) {
+    if (!id) {
+      throw new Error("please provide an id");
     }
+    db.query("DELETE FROM article WHERE id = ?", id, cb);
+  }
 }
 
 module.exports = db;

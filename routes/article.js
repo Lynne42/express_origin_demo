@@ -12,7 +12,7 @@ const { CREATED, OK, INTERNAL_SERVER_ERROR } = StatusCodes.StatusCodes;
 
 // Paths
 const p = {
-  getAll: "/all",
+  getAll: "/",
   getOne: "/:id",
   delete: "/:id",
   add: "/",
@@ -22,19 +22,16 @@ const p = {
 /**
  * Get all users.
  */
-router.get(p.getAll, async (_, res) => {
-  try {
-    articleService.getAll((err, article) => {
-      if (err) {
-        throw new Error(err);
-      }
-      return res.status(OK).json(responseJson(0, article, ""));
-    });
-  } catch (error) {
-    return res
-      .status(INTERNAL_SERVER_ERROR)
-      .json(responseJson(100001, null, error.message));
-  }
+router.get(p.getAll, (req, res) => {
+  
+  const { id } = req.cookies;
+  console.log(id)
+  articleService.getAll({userid: id}, (err, article) => {
+    if (err) {
+      throw new Error(err);
+    }
+    return res.status(OK).json(responseJson(0, article, ""));
+  });
 });
 
 /**
@@ -43,7 +40,6 @@ router.get(p.getAll, async (_, res) => {
 router.get(p.getOne, (req, res) => {
   try {
     const { id } = req.params;
-
     if (!id) {
       throw new Error("get articles error");
     }
@@ -64,7 +60,7 @@ router.get(p.getOne, (req, res) => {
 router.post(p.add, (req, res) => {
   try {
     const { title, content } = req.body;
-
+    const { id } = req.cookies;
     if (!title) {
       throw new Error("title cannot be null ");
     }
@@ -75,10 +71,11 @@ router.post(p.add, (req, res) => {
       {
         title,
         content,
+        userid: id,
       },
       (err, data) => {
         if (err) {
-          throw new Error(err);
+          throw err;
         }
         return res.status(OK).json(responseJson(0, data, "add success"));
       }
@@ -133,7 +130,6 @@ router.put(p.update, (req, res) => {
 router.delete(p.delete, (req, res) => {
   try {
     const { id } = req.params;
-    console.log(222, id);
     // Check param
     if (!id) {
       throw new Error("delete error");

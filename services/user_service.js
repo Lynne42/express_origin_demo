@@ -1,27 +1,41 @@
-const { Article } = require("../models/article_model");
+const { User } = require("../models/user_model");
 
 /**
  * Get all users.
  *
  * @returns
  */
-function getArticles(data, cb) {
+function getUsers(cb) {
   try {
-    Article.all(data, cb);
+    User.all(cb);
   } catch (error) {
     return error;
   }
 }
 
 /**
- * Add one user.
+ * get one user.
  *
  * @param user
  * @returns
  */
 function getOne(id, cb) {
   try {
-    Article.find(id, cb);
+    User.find(id, cb);
+  } catch (error) {
+    return error;
+  }
+}
+
+/**
+ * get one user by email.
+ *
+ * @param user
+ * @returns
+ */
+function getByEmail(email, cb) {
+  try {
+    User.findByEmail(email, cb);
   } catch (error) {
     return error;
   }
@@ -35,7 +49,7 @@ function getOne(id, cb) {
  */
 function addOne(data, cb) {
   try {
-    Article.add(data, cb);
+    User.add(data, cb);
   } catch (error) {
     return error;
   }
@@ -49,7 +63,7 @@ function addOne(data, cb) {
  */
 function update(data, cb) {
   try {
-    Article.update(data, cb);
+    User.update(data, cb);
   } catch (error) {
     return error;
   }
@@ -63,7 +77,7 @@ function update(data, cb) {
  */
 function deleteOne(id, cb) {
   try {
-    Article.delete(id, cb);
+    User.delete(id, cb);
   } catch (error) {
     return error;
   }
@@ -71,9 +85,10 @@ function deleteOne(id, cb) {
 
 // Export default
 module.exports = {
-  getAll: getArticles,
+  getAll: getUsers,
   getOne,
   addOne,
   update,
   delete: deleteOne,
+  getByEmail,
 };

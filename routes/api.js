@@ -1,6 +1,7 @@
 const express = require('express');
 const Router = express.Router;
 
+const userLoginRouter = require('./login');
 const userRouter = require('./users');
 const articleRouter = require('./article');
 const informationRouter = require('./information');
@@ -10,8 +11,9 @@ const informationRouter = require('./information');
 const baseRouter = Router();
 
 // Setup routers
+baseRouter.use('/login', userLoginRouter);
 baseRouter.use('/users', userRouter);
-baseRouter.use('/article', articleRouter);
+baseRouter.use('/articles', articleRouter);
 baseRouter.use('/information', informationRouter);
 
 // Export default.
