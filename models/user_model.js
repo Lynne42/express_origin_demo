@@ -1,10 +1,12 @@
 const db = require("./mysql");
+const bcrypt = require("bcrypt");
+const { bcryptSaltRounds } = require("../constants/index");
 
 class User {
   static all(cb) {
     db.query("SELECT * FROM `user`", function (err, results) {
       if (err) {
-        cb(err)
+        cb(err);
       }
       cb(null, results);
     });
@@ -16,7 +18,7 @@ class User {
       [id],
       function (err, results) {
         if (err) {
-          cb(err)
+          cb(err);
         }
         cb(null, results);
       }
@@ -29,7 +31,7 @@ class User {
       [email],
       function (err, results) {
         if (err) {
-          cb(err)
+          cb(err);
         }
         cb(null, results);
       }
@@ -38,20 +40,25 @@ class User {
 
   static add(data, cb) {
     const sql = "INSERT INTO user SET ?";
-    db.query(
-      sql,
-      {
-        email: data.email,
-        name: data.name,
-        password: data.password,
-      },
-      function (err, results) {
-        if (err) {
-          cb(err)
-        }
-        cb(null, results);
-      }
-    );
+
+    bcrypt.genSalt(bcryptSaltRounds, function (err, salt) {
+      bcrypt.hash(data.password, salt, function (err, hash) {
+        db.query(
+          sql,
+          {
+            email: data.email,
+            name: data.name,
+            password: hash,
+          },
+          function (err, results) {
+            if (err) {
+              cb(err);
+            }
+            cb(null, results);
+          }
+        );
+      });
+    });
   }
 
   static update(data, cb) {

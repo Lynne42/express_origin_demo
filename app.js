@@ -6,6 +6,7 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 
 const apiRouter = require('./routes/api');
+const checkLoginMiddlerware = require('./middleware/checkLogin');
 
 const app = express();
 
@@ -24,6 +25,9 @@ app.use(cookieParser());
 
 // 静态文件
 app.use(express.static(path.join(__dirname, 'public')));
+
+// 
+app.use('/api', checkLoginMiddlerware)
 
 app.use('/api', apiRouter);
 

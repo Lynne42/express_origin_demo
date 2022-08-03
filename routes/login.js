@@ -1,6 +1,6 @@
 const StatusCodes = require("http-status-codes");
-
 const express = require("express");
+const bcrypt = require("bcrypt");
 const router = express.Router();
 
 const userService = require("../services/user_service");
@@ -33,13 +33,17 @@ router.post(p.login, (req, res) => {
       if (err) {
         throw err;
       }
-      console.log(data);
+      
       if(data && data[0]) {
         const { email, password: pd } = data[0];
-        if(pd === password) {
-            return res.status(OK).json(responseJson(0, null, "登录成功"));
-        }
-        return res.status(OK).json(responseJson(100002, null, "密码错误"));
+
+        bcrypt.compare(password, hash, function(err, result) {
+            if(result) {
+                return res.status(OK).json(responseJson(0, null, "登录成功"));
+            }
+            return res.status(OK).json(responseJson(100002, null, "密码错误"));
+        });
+        
       } else {
         return res.status(OK).json(responseJson(100001, null, "用户不存在"));
       }
