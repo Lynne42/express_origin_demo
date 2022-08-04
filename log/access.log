@@ -1,0 +1,26 @@
+::ffff:127.0.0.1 - - [04/Aug/2022:03:27:36 +0000] "GET /api/articles HTTP/1.1" 200 29 "-" "curl/7.79.1"
+::ffff:127.0.0.1 - - [04/Aug/2022:03:30:32 +0000] "GET /api/articles/1 HTTP/1.1" 200 127 "-" "curl/7.79.1"
+请求方式：GET，
+      请求链接：/api/articles/1，
+      请求状态：200，
+      时间格式：Thu, 04 Aug 2022 03:40:29 GMT，
+      远程地址：::ffff:127.0.0.1，
+      远程用户：undefined，
+      http版本：1.1，
+      请求长度：undefined，
+      响应时间：31.690，
+      浏览器信息：curl/7.79.1，
+    
+请求方式：GET,
+      请求链接：/api/articles/1,
+      请求状态：200,
+      时间格式：Thu, 04 Aug 2022 03:41:15 GMT,
+      远程地址：::ffff:127.0.0.1,
+      远程用户：undefined,
+      http版本：1.1,
+      请求长度：undefined,
+      响应时间：38.695,
+      浏览器信息：curl/7.79.1,
+    
+请求方式：GET,请求链接：/api/articles/1,请求状态：200,时间格式：Thu, 04 Aug 2022 03:42:21 GMT,远程地址：::ffff:127.0.0.1,远程用户：undefined,http版本：1.1,请求长度：undefined,响应时间：34.672,浏览器信息：curl/7.79.1,
+    
