@@ -7,6 +7,7 @@ const logger = require("morgan");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const rfs = require("rotating-file-stream");
+const errorhandler = require('errorhandler')
 
 const logDirectory = path.join(__dirname, "log");
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
@@ -80,6 +81,21 @@ app.use(function (req, res, next) {
 });
 
 // error handler
+
+if (process.env.NODE_ENV === 'development') {
+  // only use in development
+  app.use(errorhandler({ log: errorNotification }))
+}
+
+function errorNotification (err, str, req) {
+  var title = 'Error in ' + req.method + ' ' + req.url
+
+  notifier.notify({
+    title: title,
+    message: str
+  })
+}
+/** 
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
@@ -89,5 +105,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render("error");
 });
+
+*/
 
 module.exports = app;
